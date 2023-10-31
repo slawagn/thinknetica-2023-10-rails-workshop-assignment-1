@@ -46,3 +46,5 @@ group :development do
 
 end
 
+
+gem "interactor", "~> 3.1"

@@ -10,11 +10,19 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.1].define(version: 2023_10_31_185544) do
+ActiveRecord::Schema[7.1].define(version: 2023_11_01_155008) do
   create_table "cloud_payments", force: :cascade do |t|
     t.integer "user_uid"
     t.integer "amount_cents"
     t.string "currency"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+  end
+
+  create_table "deliveries", force: :cascade do |t|
+    t.string "address"
+    t.string "person"
+    t.integer "weight"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
   end
@@ -29,6 +37,7 @@ ActiveRecord::Schema[7.1].define(version: 2023_10_31_185544) do
   create_table "products", force: :cascade do |t|
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.integer "cost"
   end
 
   create_table "users", force: :cascade do |t|

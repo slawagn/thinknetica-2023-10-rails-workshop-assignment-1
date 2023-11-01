@@ -1,4 +1,4 @@
-class Sdek::SetupDelivery
+class Sdek::RequestDeliverySetup
   include Interactor
 
   def call
@@ -9,11 +9,6 @@ class Sdek::SetupDelivery
       Weight: #{context.weight}
     INFO
 
-    case [0, 1].sample
-    when 0
-      { result: :failed }
-    when 1
-      { result: :succeeded }
-    end
+    context.fail!(error: :failed_delivery_request) if [0, 1, 2].sample == 0
   end
 end

@@ -9,6 +9,12 @@ class Sdek::RequestDeliverySetup
       Weight: #{context.weight}
     INFO
 
-    context.fail!(error: :failed_delivery_request) if [0, 1, 2].sample == 0
+    context.fail!(error: :failed_delivery_request) if request_failed?
+  end
+
+  private
+
+  def request_failed?
+    [0, 1, 2].sample == 0
   end
 end

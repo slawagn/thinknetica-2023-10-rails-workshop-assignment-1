@@ -1,18 +1,12 @@
 class PaymentsController < ApplicationController
   def create
     product = Product.find(params[:product_id])
-    payment_result = CloudPayment.process(
-      user_uid: current_user.cloud_payments_uid,
-      amount_cents: params[:amount],
-      currency: 'RUB'
-    )
+    purchase_result = PurchaseProduct.call(product: product, user: current_user)
 
-    if payment_result[:status] == :completed
-      product_access = ProductAccess.create(user: current_user, product: product)
-      OrderMailer.product_access_email(product_access).deliver_later
+    if purchase_result.success?
       redirect_to action: :successful_payment
     else
-      redirect_to action: :failed_payment
+      redirect_to action: :failed_payment, error: purchase_result.error
     end
   end
 
@@ -21,6 +15,16 @@ class PaymentsController < ApplicationController
   end
 
   def failed_payment
-    render json: { status: 'Failed to place order :(' }
+    failure_reason =
+      case params[:error]&.to_sym
+      when :failed_cloud_payment
+        'failed cloud payment'
+      when :delivery_setup_failure
+        'delivery setup failure'
+      else
+        'unknown reason'
+      end
+
+    render json: { status: "Failed to place order due to #{failure_reason}" }
   end
 end

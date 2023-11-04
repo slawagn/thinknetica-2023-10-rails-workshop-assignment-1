@@ -1,5 +1,5 @@
 class Delivery < ApplicationRecord
-  def rollback!
-    destroy!
+  def cancel!
+    update!(status: :cancelled)
   end
 end

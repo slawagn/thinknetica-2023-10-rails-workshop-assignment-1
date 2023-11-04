@@ -9,7 +9,7 @@ class PurchaseProduct::SetupDelivery
 
   def rollback
     unsetup_delivery
-    destroy_delivery_info
+    update_delivery_status_to_cancelled
   end
 
   private
@@ -40,7 +40,7 @@ class PurchaseProduct::SetupDelivery
     Sdek::RequestDeliveryCancel.call(context.delivery_setup_result[:delivery_id])
   end
 
-  def destroy_delivery_info
-    context.delivery.rollback!
+  def update_delivery_status_to_cancelled
+    context.delivery.cancel!
   end
 end
